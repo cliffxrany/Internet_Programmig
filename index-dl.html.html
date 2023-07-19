@@ -1,0 +1,86 @@
+<html lang="en">
+
+<head>
+<link href="dl.css" rel="stylesheet">
+<link rel="icon" href="ip.png">
+<title>Internet Programming Class</title>
+</head>
+
+<body>
+
+<p>Cryptids of Cornwall:</p>
+
+<dl>
+    <dt>Beast of Bodmin</dt>
+    <dd>A large feline inhabiting Bodmin Moor.</dd>
+
+    <dt>Morgawr</dt>
+    <dd>A sea serpent.</dd>
+
+    <dt>Owlman</dt>
+    <dd>A giant owl-like creature.</dd>
+</dl>
+
+<?php 
+if(!isset($_GET["Submit"]))
+?>
+
+<form action="" method="get" class="form-example">
+  <div class="form-example">
+    <label for="name">Enter your name: </label>
+    <input type="text" name="name" id="name" required>
+  </div>
+  <div class="form-example">
+    <label for="email">Enter your email: </label>
+    <input type="email" name="email" id="email" required>
+  </div>
+  <div class="form-example">
+    <input type="submit" value="Subscribe!">
+  </div>
+</form>
+
+<?php
+}
+else 
+{ 
+  $myname = $_GET["name"];
+  $myemail = $_GET["email"];
+  echo "hey you have submitted the form!!!";
+  echo "for name you submitted"; . $myname ."<BB>";
+  echo "for email you submitted"; .$myemail . "<BB>";
+
+}
+
+?>
+
+<p>List of baking items</p>
+<ol>
+    <li>Mix flour, baking powder, sugar, and salt.</li>
+    <li>In another bowl, mix eggs, milk, and oil.</li>
+    <li>Stir both mixtures together.</li>
+    <li>Fill muffin tray 3/4 full.</li>
+    <li>Bake for 20 minutes.
+        <ol>
+            <li>Start with high flame</li>
+            <li>After five minutes, change to medium flame</li>
+            <li>After 15 minutes from (start change) change to low flame</li>
+        </ol>
+    </li>
+
+  </ol>
+  <p>Dairy products</p>
+
+<ul>
+    <li>Milk</li>
+    <li>Cheese
+        <ul>
+            <li>Blue cheese</li>
+            <li>Feta</li>
+        </ul>
+    </li>
+</ul>
+      
+
+
+</body>
+</html>
