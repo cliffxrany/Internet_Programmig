@@ -12,6 +12,7 @@
     </form>
     <a href="browse.php">Browse Photos</a>
     <?php
+    require_once "config.php";
     // Handle the photo upload
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $targetDir = "photos/";
