@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Photo Browser</title>
+    <title>Photo Browser...</title>
     <style>
         .image-container {
             text-align: center;
