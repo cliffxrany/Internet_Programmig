@@ -1,48 +1,76 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Photo Browser...</title>
-    <style>
-        .image-container {
-            text-align: center;
-        }
-        .image-container img {
-            max-width: 500px;
-            max-height: 500px;
-        }
-    </style>
+    <title>Browse Photos</title>
 </head>
 <body>
-    <h1>Photo Browser</h1>
-    <div class="image-container">
-        <?php
-        // Retrieve a random photo from the database
-        $mysqli = new mysqli("localhost", "root", "toor", "db_CNS");
-        $result = $mysqli->query("SELECT * FROM photos ORDER BY RAND() LIMIT 1");
+    <h1>Browse Photos</h1>
+    <!-- Link to upload photos -->
+    <a href="upload.php">Upload Photos</a>
+    <br><br>
+    <?php
+    require_once "config.php";
 
-        if ($result->num_rows > 0) {
-            $row = $result->fetch_assoc();
-            $filename = $row["filename"];
-            $caption = $row["caption"];
+    // Retrieve photos from the database
+    $sql = "SELECT id, filename, caption FROM photos";
+    $result = $conn->query($sql);
 
-            echo '<img src="' . $filename . '" alt="' . $caption . '">';
-            echo '<p>' . $caption . '</p>';
+    if ($result->num_rows > 0) {
+        $photos = $result->fetch_all(MYSQLI_ASSOC);
+        ?>
+        <div>
+            <!-- Display photo -->
+            <img id="photo" src="<?php echo $photos[0]['filename']; ?>" width="500" height="300" alt="Photo">
+            <br>
+            <!-- Display caption -->
+            <div id="caption"><?php echo $photos[0]['caption']; ?></div>
+            <br>
+            <!-- Buttons for navigating and deleting photos -->
+            <button onclick="previousPhoto()">Previous</button>
+            <button onclick="nextPhoto()">Next</button>
+            <button onclick="deletePhoto()">Delete</button>
+        </div>
 
-            echo '<a href="delete.php?filename=' . urlencode($filename) . '">Delete</a>';
-        } else {
-            echo "No photos found.";
+        <script>
+        var currentIndex = 0;
+        var photos = <?php echo json_encode($photos); ?>;
+
+        // Function to show a specific photo
+        function showPhoto(index) {
+            document.getElementById("photo").src = photos[index]['filename'];
+            document.getElementById("caption").innerHTML = photos[index]['caption'];
+            currentIndex = index;
         }
 
-        $result->close();
-        $mysqli->close();
-        ?>
-    </div>
+        // Function to show the previous photo
+        function previousPhoto() {
+            if (currentIndex > 0) {
+                showPhoto(currentIndex - 1);
+            }
+        }
 
-    <div>
-        <a href="browse.php?prev=1">&lt;&lt; Previous</a>
-        <a href="browse.php">&gt;&gt; Next</a>
-    </div>
+        // Function to show the next photo
+        function nextPhoto() {
+            if (currentIndex < photos.length - 1) {
+                showPhoto(currentIndex + 1);
+            }
+        }
 
-    <a href="upload.php">Upload Photo</a>
+        // Function to delete the current photo
+        function deletePhoto() {
+            var photoId = photos[currentIndex]['id'];
+            if (confirm("Are you sure you want to delete this photo?")) {
+                window.location.href = "delete.php?id=" + photoId;
+            }
+        }
+
+        // Show the initial photo
+        showPhoto(currentIndex);
+        </script>
+        <?php
+    } else {
+        echo "No photos found.";
+    }
+    ?>
 </body>
 </html>

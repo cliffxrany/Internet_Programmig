@@ -1,22 +1,27 @@
 <?php
-if (isset($_GET["filename"])) {
-    $filename = $_GET["filename"];
-    $mysqli = new mysqli("localhost", "root", "toor", "db_CNS");
-    $stmt = $mysqli->prepare("DELETE FROM photos WHERE filename = ?");
-    $stmt->bind_param("s", $filename);
+require_once "config.php";
+
+if (isset($_GET['id'])) {
+    $photoId = $_GET['id'];
+
+    // Retrieve photo details
+    $stmt = $conn->prepare("SELECT filename FROM photos WHERE id = ?");
+    $stmt->bind_param("i", $photoId);
+    $stmt->execute();
+    $stmt->bind_result($filename);
+    $stmt->fetch();
+    $stmt->close();
+
+    // Delete photo from database
+    $stmt = $conn->prepare("DELETE FROM photos WHERE id = ?");
+    $stmt->bind_param("i", $photoId);
     $stmt->execute();
     $stmt->close();
-    $mysqli->close();
 
-    // Delete the file from the server
-    if (file_exists($filename)) {
-        unlink($filename);
+    // Delete photo file from the server
+    if (unlink($filename)) {
+        echo "Photo deleted successfully.";
+    } else {
+        echo "Failed to delete the photo.";
     }
-
-    header("Location: browse.php");
-    exit;
-} else {
-    header("Location: browse.php");
-    exit;
 }
-?>
